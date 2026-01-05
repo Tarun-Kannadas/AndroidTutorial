@@ -32,4 +32,12 @@
         android:text="Custom Dialog"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:translationX="75dp" />
+
+    <Button
+        android:id="@+id/notify_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify"
+        android:textSize="34sp"
+        android:translationX="135dp" />
 </LinearLayout>
