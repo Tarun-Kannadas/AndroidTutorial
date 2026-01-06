@@ -22,6 +22,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotificationActivity : AppCompatActivity() {
 
@@ -112,18 +116,21 @@ class NotificationActivity : AppCompatActivity() {
             }
             else
             {
-                Thread({
+                lifecycleScope.launch {
                     SystemClock.sleep(2000)
 
                     var progress = 0
 
-                    while(progress < PROGRESS_MAX)
-                    {
-                        SystemClock.sleep(1000)
-                        progress += 20
-                        notification.setContentTitle("Progress:$progress%").setProgress(PROGRESS_MAX, progress,false)
-                        notificationManager.notify(1, notification.build())
+                    withContext(Dispatchers.IO){
+                        while(progress < PROGRESS_MAX)
+                        {
+                            SystemClock.sleep(1000)
+                            progress += 20
+                            notification.setContentTitle("Progress:$progress%").setProgress(PROGRESS_MAX, progress,false)
+                            notificationManager.notify(1, notification.build())
+                        }
                     }
+
                     notification.setContentTitle("Download Status!").apply{
                         setProgress(PROGRESS_MAX,100, false)
                         setOngoing(false)
@@ -132,6 +139,29 @@ class NotificationActivity : AppCompatActivity() {
                     }
 
                     notificationManager.notify(1,notification.build())
+                }
+
+
+                Thread({
+//                    SystemClock.sleep(2000)
+//
+//                    var progress = 0
+//
+//                    while(progress < PROGRESS_MAX)
+//                    {
+//                        SystemClock.sleep(1000)
+//                        progress += 20
+//                        notification.setContentTitle("Progress:$progress%").setProgress(PROGRESS_MAX, progress,false)
+//                        notificationManager.notify(1, notification.build())
+//                    }
+//                    notification.setContentTitle("Download Status!").apply{
+//                        setProgress(PROGRESS_MAX,100, false)
+//                        setOngoing(false)
+//                        setContentText("Download Successful")
+//                        setSmallIcon(android.R.drawable.stat_sys_download_done)
+//                    }
+//
+//                    notificationManager.notify(1,notification.build())
                 }).start()
             }
 
@@ -139,8 +169,10 @@ class NotificationActivity : AppCompatActivity() {
     }
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(notificationChannelId, "Downloads", NotificationManager.IMPORTANCE_LOW)
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(notificationChannelId,
+                "Downloads", NotificationManager.IMPORTANCE_LOW)
+            val manager = getSystemService(
+                Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
         }
     }
