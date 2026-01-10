@@ -22,6 +22,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,7 +77,7 @@ class NotificationActivity : AppCompatActivity() {
         }
 
         btn.setOnClickListener {
-            Toast(this).showCustomToast(
+            Toast(applicationContext).showCustomToast(
                 txtMsg.toString(),
                 this
             )
