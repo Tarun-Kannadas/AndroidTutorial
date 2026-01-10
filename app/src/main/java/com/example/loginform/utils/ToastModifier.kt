@@ -21,6 +21,8 @@ fun Toast.showCustomToast(message: String, activity: Activity)
     val icon = toastLayout.findViewById<ImageView>(R.id.iv_custom_id)
     icon.setImageResource(R.drawable.notification)
 
+//    asdasdasd
+
     this.apply {
         setGravity(Gravity.BOTTOM, 0, 100)
         duration = Toast.LENGTH_LONG
