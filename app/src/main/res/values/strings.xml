@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LoginForm</string>
+    <string name="notif_string">String Implementation</string>
 </resources>

@@ -14,8 +14,7 @@ fun Toast.showCustomToast(message: String, activity: Activity)
         activity.findViewById(R.id.id_custom_layout)
     )
 
-    val textToast = toastLayout.findViewById<TextView>(
-        R.id.tv_custom_id)
+    val textToast = toastLayout.findViewById<TextView>(R.id.tv_custom_id)
 
     textToast.text = message
 
