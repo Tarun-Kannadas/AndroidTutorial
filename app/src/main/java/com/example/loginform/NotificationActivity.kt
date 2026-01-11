@@ -18,11 +18,13 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.loginform.utils.DialogModifier
 import com.example.loginform.utils.showCustomToast
 import android.Manifest
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -88,27 +90,29 @@ class NotificationActivity : AppCompatActivity() {
         notificationManager = NotificationManagerCompat.from(this)
 
         btnNotification.setOnClickListener {
+
             val homeIntent = Intent(this, HomeActivity::class.java)
 
-            var pendingIntent: PendingIntent = PendingIntent.getActivity(
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(
                 this,0,homeIntent, PendingIntent.FLAG_IMMUTABLE
             )
 
             val PROGRESS_MAX = 100
 
-            var notification = NotificationCompat.Builder(this,notificationChannelId).apply{
+            val notification = NotificationCompat.Builder(this, notificationChannelId).apply{
                 setSmallIcon(android.R.drawable.stat_sys_download)
                 setContentTitle("Download Notification")
                 setContentText("Downloading...")
                 setPriority(NotificationCompat.PRIORITY_LOW)
                 setOngoing(true)
                 setOnlyAlertOnce(true)
-                setProgress(PROGRESS_MAX, 0,true)
+                setProgress(PROGRESS_MAX,0,true)
                 setContentIntent(pendingIntent)
                 setAutoCancel(true)
             }
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -117,63 +121,79 @@ class NotificationActivity : AppCompatActivity() {
             }
             else
             {
+
+//                Thread({
+//                    SystemClock.sleep(2000)
+//
+//                    var progress = 0
+//
+//                    while (progress < PROGRESS_MAX)
+//                    {
+//                        SystemClock.sleep(1000)
+//
+//                        progress += 20
+//
+//                        notification.setContentTitle("Progress $progress%").setProgress(PROGRESS_MAX,progress,false)
+//                        notificationManager.notify(1,notification.build())
+//                    }
+//
+//                    notification.setContentTitle("Download Successful!").apply {
+//                        setSmallIcon(android.R.drawable.stat_sys_download_done)
+//                        setProgress(PROGRESS_MAX,progress,false)
+//                        setContentText("Downloaded")
+//                        setOngoing(false)
+//                    }
+//
+//                    notificationManager.notify(1, notification.build())
+//                    pendingIntent.send()
+//                    SystemClock.sleep(1000)
+//                    notificationManager.cancel(1)
+//                }).start()
+
                 lifecycleScope.launch {
                     SystemClock.sleep(2000)
 
                     var progress = 0
 
-                    withContext(Dispatchers.IO){
-                        while(progress < PROGRESS_MAX)
+                    withContext(Dispatchers.IO)
+                    {
+                        while (progress < PROGRESS_MAX)
                         {
                             SystemClock.sleep(1000)
+
                             progress += 20
-                            notification.setContentTitle("Progress:$progress%").setProgress(PROGRESS_MAX, progress,false)
-                            notificationManager.notify(1, notification.build())
+
+                            notification.setContentTitle("Progress $progress%").setProgress(PROGRESS_MAX,progress,false)
+                            notificationManager.notify(1,notification.build())
                         }
                     }
 
-                    notification.setContentTitle("Download Status!").apply{
-                        setProgress(PROGRESS_MAX,100, false)
-                        setOngoing(false)
-                        setContentText("Download Successful")
+                    notification.setContentTitle("Download Successful!").apply {
                         setSmallIcon(android.R.drawable.stat_sys_download_done)
+                        setProgress(PROGRESS_MAX,progress,false)
+                        setContentText("Downloaded")
+                        setOngoing(false)
                     }
 
-                    notificationManager.notify(1,notification.build())
+                    notificationManager.notify(1, notification.build())
+                    pendingIntent.send()
+                    SystemClock.sleep(1000)
+                    notificationManager.cancel(1)
                 }
-
-
-                Thread({
-//                    SystemClock.sleep(2000)
-//
-//                    var progress = 0
-//
-//                    while(progress < PROGRESS_MAX)
-//                    {
-//                        SystemClock.sleep(1000)
-//                        progress += 20
-//                        notification.setContentTitle("Progress:$progress%").setProgress(PROGRESS_MAX, progress,false)
-//                        notificationManager.notify(1, notification.build())
-//                    }
-//                    notification.setContentTitle("Download Status!").apply{
-//                        setProgress(PROGRESS_MAX,100, false)
-//                        setOngoing(false)
-//                        setContentText("Download Successful")
-//                        setSmallIcon(android.R.drawable.stat_sys_download_done)
-//                    }
-//
-//                    notificationManager.notify(1,notification.build())
-                }).start()
             }
 
         }
     }
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(notificationChannelId,
+
+    private fun createNotificationChannel()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            val channel = NotificationChannel(
+                notificationChannelId,
                 "Downloads", NotificationManager.IMPORTANCE_LOW)
-            val manager = getSystemService(
-                Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
         }
     }
