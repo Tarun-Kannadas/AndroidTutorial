@@ -21,7 +21,7 @@ class DialogModifier(context: Context): AlertDialog.Builder(context)
         }
 
         builder.setPositiveButton("Yes"){
-            dialog, id -> listener(ResponseType.YES)
+            _,_ -> listener(ResponseType.YES)
         }
 
         builder.setNegativeButton("Abort"){
@@ -34,7 +34,7 @@ class DialogModifier(context: Context): AlertDialog.Builder(context)
         }
 
         val alertDialor = builder.create()
-        alertDialor.setCancelable(true)
+        alertDialor.setCancelable(false)
         alertDialor.show()
     }
 

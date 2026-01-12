@@ -6,13 +6,15 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:background="@color/purple_500">
 
     <ImageView
         android:id="@+id/iv_custom_id"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:background="@color/purple_500"/>
 
     <TextView
         android:id="@+id/tv_custom_id"
@@ -20,6 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Custom Toast Text"
         android:textColor="@android:color/black"
-        android:textSize="34sp" />
+        android:textSize="30sp"
+        android:background="@color/purple_500"/>
 
 </LinearLayout>

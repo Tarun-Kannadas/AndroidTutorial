@@ -64,7 +64,11 @@ class NotificationActivity : AppCompatActivity() {
 
                 if(result == "YES")
                 {
-                    Toast.makeText(this,"Dialog Accepted",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this,"Dialog Accepted",Toast.LENGTH_SHORT).show()
+                    Toast(this).showCustomToast(
+                        "Dialog Accepted",
+                        this
+                    )
                 }
                 else if(result == "NO")
                 {
@@ -191,7 +195,8 @@ class NotificationActivity : AppCompatActivity() {
         {
             val channel = NotificationChannel(
                 notificationChannelId,
-                "Downloads", NotificationManager.IMPORTANCE_LOW)
+                "Downloads",
+                NotificationManager.IMPORTANCE_LOW)
 
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
