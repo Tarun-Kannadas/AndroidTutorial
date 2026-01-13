@@ -12,8 +12,8 @@
     </style>
 
     <style name="Theme.LoginForm" parent="Base.Theme.LoginForm">
-        <item name="android:statusBarColor">#2ECC71</item>
-        <item name="android:background">#2ECC71</item>
+        <item name="android:statusBarColor">#E6F3F3</item>
+        <item name="android:background">#F5EFEF</item>
         <item name="fontFamily">serif</item>
         <item name="android:textAlignment">center</item>
         <item name="android:navigationBarColor">#FF5645</item>

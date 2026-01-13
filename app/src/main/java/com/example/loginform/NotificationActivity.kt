@@ -167,7 +167,8 @@ class NotificationActivity : AppCompatActivity() {
 
                             progress += 20
 
-                            notification.setContentTitle("Progress $progress%").setProgress(PROGRESS_MAX,progress,false)
+                            notification.setContentTitle("Progress $progress%")
+                            notification.setProgress(PROGRESS_MAX,progress,false)
                             notificationManager.notify(1,notification.build())
                         }
                     }
@@ -185,7 +186,6 @@ class NotificationActivity : AppCompatActivity() {
                     notificationManager.cancel(1)
                 }
             }
-
         }
     }
 
