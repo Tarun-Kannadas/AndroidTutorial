@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.loginform.data.AppDatabase
+import com.example.loginform.database.LoginDatabase
 import com.example.loginform.data.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +25,7 @@ class RegisterActivity : AppCompatActivity() {
         val phn_num = findViewById<EditText>(R.id.reg_number)
         val pass = findViewById<EditText>(R.id.reg_pass)
 
-        val db = AppDatabase.getDatabase(this)
+        val db = LoginDatabase.getDatabase(this)
         val userDao = db.UserDao()
 
         btn_reg.setOnClickListener {

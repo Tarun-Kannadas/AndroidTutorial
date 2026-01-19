@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter Username"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
         android:id="@+id/textView2"
@@ -37,7 +38,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <Button
         android:id="@+id/loginButton"

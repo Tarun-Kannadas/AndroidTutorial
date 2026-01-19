@@ -2,7 +2,6 @@ package com.example.loginform
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -10,7 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.loginform.data.AppDatabase
+import com.example.loginform.database.LoginDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val loginbtn = findViewById<Button>(R.id.loginButton)
         val registerbtn = findViewById<Button>(R.id.registerBtn)
 
-        val db = AppDatabase.getDatabase(this)
+        val db = LoginDatabase.getDatabase(this)
         val userDao = db.UserDao()
 
         loginbtn.setOnClickListener {
@@ -54,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                             val intent = Intent(this@MainActivity, HomeActivity::class.java)
                             intent.putExtra("username", user.username)
                             startActivity(intent)
+                            finish()
                         }
                         else
                         {
