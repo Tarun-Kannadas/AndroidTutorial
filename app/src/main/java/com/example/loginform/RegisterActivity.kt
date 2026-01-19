@@ -30,19 +30,19 @@ class RegisterActivity : AppCompatActivity() {
 
         btn_reg.setOnClickListener {
 
-            val username = user_name.text.toString()
-            val password = pass.text.toString()
-            val u_email = email.text.toString()
-            val u_num = phn_num.text.toString()
+            val et_username = user_name.text.toString()
+            val et_password = pass.text.toString()
+            val et_email = email.text.toString()
+            val et_num = phn_num.text.toString()
 
-            if(username.isNotEmpty() && u_email.isNotEmpty() && u_num.isNotEmpty() && password.isNotEmpty())
+            if(et_username.isNotEmpty() && et_email.isNotEmpty() && et_num.isNotEmpty() && et_password.isNotEmpty())
             {
                 val user = User(
                     id = 0,
-                    username,
-                    u_email,
-                    u_num,
-                    password
+                    et_username,
+                    et_email,
+                    et_num,
+                    et_password
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {
