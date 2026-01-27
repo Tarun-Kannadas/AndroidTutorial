@@ -20,9 +20,16 @@ class HomeActivity : AppCompatActivity() {
         }
 
         val frag_btn = findViewById<Button>(R.id.frag_trigger_id)
+        val recycle_btn = findViewById<Button>(R.id.btn_recycler_id)
 
         frag_btn.setOnClickListener {
             startActivity(Intent(this, FragmentActivity::class.java))
         }
+
+        recycle_btn.setOnClickListener {
+            startActivity(Intent(this, RecyclerActivity::class.java))
+        }
+
+
     }
 }

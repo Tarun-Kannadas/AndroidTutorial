@@ -9,67 +9,79 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.loginform.database.LoginDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.loginform.repository.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
+        setupWindowInsets()
+
+        // UI References
         val userName = findViewById<EditText>(R.id.etName)
         val userPass = findViewById<EditText>(R.id.etPassword)
+        val loginBtn = findViewById<Button>(R.id.loginButton)
+        val registerBtn = findViewById<Button>(R.id.registerBtn)
 
-        val loginbtn = findViewById<Button>(R.id.loginButton)
-        val registerbtn = findViewById<Button>(R.id.registerBtn)
-
+        // Initialize Repository
         val db = LoginDatabase.getDatabase(this)
-        val userDao = db.UserDao()
+        val repository = UserRepository(db.UserDao())
 
-        loginbtn.setOnClickListener {
-            val uname = userName.text.toString()
-            val pass = userPass.text.toString()
+        loginBtn.setOnClickListener {
+            // Trim inputs to remove accidental leading/trailing spaces
+            val uname = userName.text.toString().trim()
+            val pass = userPass.text.toString().trim()
 
-            if (uname.isNotEmpty() && pass.isNotEmpty())
-            {
-                CoroutineScope(Dispatchers.IO).launch {
+            if (uname.isNotEmpty() && pass.isNotEmpty()) {
+                // Disable button to prevent multiple clicks during processing
+                loginBtn.isEnabled = false
 
-                    val user = userDao.loginUser(uname, pass)
+                lifecycleScope.launch {
+                    try {
+                        val user = repository.authUser(uname, pass)
 
-                    withContext(Dispatchers.Main)
-                    {
-                        if(user != null){
-                            Toast.makeText(this@MainActivity,"Login Successful", Toast.LENGTH_SHORT).show()
+                        if (user != null) {
+                            Toast.makeText(this@MainActivity, "Welcome, ${user.username}!", Toast.LENGTH_SHORT).show()
 
-                            val intent = Intent(this@MainActivity, HomeActivity::class.java)
-                            intent.putExtra("username", user.username)
+                            val intent = Intent(this@MainActivity, HomeActivity::class.java).apply {
+                                putExtra("username", user.username)
+                            }
                             startActivity(intent)
-                            finish()
+                            finish() // Kill MainActivity so user can't "Back" into the login screen
+                        } else {
+                            Toast.makeText(this@MainActivity, "Invalid username or password", Toast.LENGTH_SHORT).show()
                         }
-                        else
-                        {
-                            Toast.makeText(this@MainActivity,"Invalid Username or Password", Toast.LENGTH_SHORT).show()
-                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(this@MainActivity, "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    } finally {
+                        // Re-enable button if login fails
+                        loginBtn.isEnabled = true
                     }
                 }
-            }
-            else
-            {
-                Toast.makeText(this,"Enter all fields!",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Please enter both credentials", Toast.LENGTH_SHORT).show()
             }
         }
 
-        registerbtn.setOnClickListener {
+        registerBtn.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun setupWindowInsets() {
+        // Ensure the layout respects system bars (status bar, navigation bar)
+        val mainView = findViewById<android.view.View>(R.id.main)
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         }
     }
 }

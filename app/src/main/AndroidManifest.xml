@@ -14,17 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginForm">
         <activity
+            android:name=".RecyclerActivity"
+            android:exported="false" />
+        <activity
             android:name=".FragmentActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".NotificationActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".RegisterActivity"
@@ -40,7 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

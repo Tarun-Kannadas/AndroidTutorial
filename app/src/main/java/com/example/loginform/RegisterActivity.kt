@@ -6,61 +6,66 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.loginform.database.LoginDatabase
+import androidx.lifecycle.lifecycleScope
 import com.example.loginform.data.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.loginform.database.LoginDatabase
+import com.example.loginform.repository.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val btn_login = findViewById<Button>(R.id.log_btn)
-        val btn_reg = findViewById<Button>(R.id.reg_btn)
-        val user_name = findViewById<EditText>(R.id.reg_username)
+        // UI References
+        val btnLogin = findViewById<Button>(R.id.log_btn)
+        val btnReg = findViewById<Button>(R.id.reg_btn)
+        val userName = findViewById<EditText>(R.id.reg_username)
         val email = findViewById<EditText>(R.id.reg_email)
-        val phn_num = findViewById<EditText>(R.id.reg_number)
+        val phnNum = findViewById<EditText>(R.id.reg_number)
         val pass = findViewById<EditText>(R.id.reg_pass)
 
+        // Initialize Repository instead of DAO directly
         val db = LoginDatabase.getDatabase(this)
-        val userDao = db.UserDao()
+        val repository = UserRepository(db.UserDao())
 
-        btn_reg.setOnClickListener {
+        btnReg.setOnClickListener {
+            val etUsername = userName.text.toString()
+            val etPassword = pass.text.toString()
+            val etEmail = email.text.toString()
+            val etNum = phnNum.text.toString()
 
-            val et_username = user_name.text.toString()
-            val et_password = pass.text.toString()
-            val et_email = email.text.toString()
-            val et_num = phn_num.text.toString()
-
-            if(et_username.isNotEmpty() && et_email.isNotEmpty() && et_num.isNotEmpty() && et_password.isNotEmpty())
-            {
+            if (etUsername.isNotBlank() && etEmail.isNotBlank() && etNum.isNotBlank() && etPassword.isNotBlank()) {
                 val user = User(
-                    id = 0,
-                    et_username,
-                    et_email,
-                    et_num,
-                    et_password
+                    id = 0, // Room generates this if autoGenerate = true in your Entity
+                    etUsername,
+                    etEmail,
+                    etNum,
+                    etPassword
                 )
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    userDao.registerUser(user)
+                // lifecycleScope handles the thread switching for you
+                lifecycleScope.launch {
+                    try {
+                        repository.registerUser(user)
 
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@RegisterActivity,"Registration Successfull!", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
+                        Toast.makeText(this@RegisterActivity, "Registration Successful!", Toast.LENGTH_SHORT).show()
+
+                        // Navigate back to login
+                        val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish() // Close registration activity
+                    } catch (e: Exception) {
+                        Toast.makeText(this@RegisterActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
-            else
-            {
-                Toast.makeText(this,"Please fill all fields!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
             }
         }
 
-        btn_login.setOnClickListener {
+        btnLogin.setOnClickListener {
+            // finish() is often better here if MainActivity is already in the backstack
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
