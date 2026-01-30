@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.loginform.data.User
 
 @Dao
@@ -21,4 +22,7 @@ interface UserDao {
 
     @Delete
     suspend fun deleteUser(user: User)
+
+    @Update
+    suspend fun updateUser(user: User)
 }

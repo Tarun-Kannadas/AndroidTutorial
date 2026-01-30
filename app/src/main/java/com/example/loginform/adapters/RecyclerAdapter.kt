@@ -12,6 +12,7 @@ import com.example.loginform.data.User
 
 class RecyclerAdapter(
     private var userList: List<User>,
+    private var onEditClick: (User) -> Unit,
     private val onDeleteClick: (User) -> Unit) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
@@ -24,6 +25,10 @@ class RecyclerAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentUser = userList[position]
         holder.tvUserName.text = "User: ${currentUser.username}"
+
+        holder.ivEditUser.setOnClickListener {
+            onEditClick(currentUser)
+        }
 
         // Handle clicks on the Image (e.g., delete or view profile)
         holder.ivUserImage.setOnClickListener {
@@ -43,5 +48,7 @@ class RecyclerAdapter(
         // Ensure these IDs match exactly what is in recycler_user_details.xml
         val tvUserName: TextView = itemView.findViewById(R.id.recycler_user_id)
         val ivUserImage: ImageView = itemView.findViewById(R.id.recycler_iv_id)
+
+        val ivEditUser: ImageView = itemView.findViewById(R.id.iv_edit_user)
     }
 }

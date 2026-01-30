@@ -21,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
 
         val frag_btn = findViewById<Button>(R.id.frag_trigger_id)
         val recycle_btn = findViewById<Button>(R.id.btn_recycler_id)
+        val notif_btn = findViewById<Button>(R.id.notif_btn_id)
 
         frag_btn.setOnClickListener {
             startActivity(Intent(this, FragmentActivity::class.java))
@@ -28,6 +29,10 @@ class HomeActivity : AppCompatActivity() {
 
         recycle_btn.setOnClickListener {
             startActivity(Intent(this, RecyclerActivity::class.java))
+        }
+
+        notif_btn.setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
         }
 
 

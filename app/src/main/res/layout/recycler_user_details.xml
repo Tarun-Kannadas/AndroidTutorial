@@ -30,11 +30,19 @@
             android:textSize="34sp" />
 
         <ImageView
+            android:id="@+id/iv_edit_user"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
             android:id="@+id/recycler_iv_id"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@android:drawable/btn_dialog"
+            app:srcCompat="@android:drawable/ic_delete"
             tools:srcCompat="@tools:sample/avatars" />
 
     </LinearLayout>
