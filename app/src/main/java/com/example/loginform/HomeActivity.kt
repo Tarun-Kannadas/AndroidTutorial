@@ -34,7 +34,5 @@ class HomeActivity : AppCompatActivity() {
         notif_btn.setOnClickListener {
             startActivity(Intent(this, NotificationActivity::class.java))
         }
-
-
     }
 }
